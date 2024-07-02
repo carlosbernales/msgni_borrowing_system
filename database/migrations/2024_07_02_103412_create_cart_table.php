@@ -16,8 +16,6 @@ return new class extends Migration
             $table->integer('user_fk_id');
             $table->integer('fk_product_id');
             $table->integer('cart_qty');
-            $table->integer('product_price');
-            $table->integer('cart_cost');
             $table->timestamps();
         });
     }

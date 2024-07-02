@@ -418,6 +418,7 @@
 	<!-- Power BI Admin App -->
 	<script src="admin/main-horizontal/js/jquery.smartmenus.js"></script>
 	<script src="admin/main-horizontal/js/menus.js"></script>
+	<script src="admin/main-horizontal/js/template.js"></script>
 	
 	<script src="admin/main-horizontal/js/pages/data-table.js"></script>
 	
