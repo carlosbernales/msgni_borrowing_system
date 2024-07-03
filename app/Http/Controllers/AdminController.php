@@ -78,12 +78,12 @@ class AdminController extends Controller
     public function add_product(Request $request)
     {
         $request->validate([
-            'product_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:10000', // adjust max size and allowed file types as needed
+            'product_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:10000', 
         ]);
 
         if ($request->hasFile('product_image')) {
             $image = $request->file('product_image');
-            $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension(); // Generating a unique name
+            $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension(); 
             $image->move(public_path('product_images'), $imageName);
 
             $category = Category::findOrFail($request->cat_fk_id);
@@ -103,6 +103,49 @@ class AdminController extends Controller
         return redirect()->back()->with('error', 'Failed to add product. Please upload a valid image.');
     }
 
+
+    public function edit_product(Request $request, $id)
+    {
+        if (!session()->has('admin_id')) {
+            return redirect('/');
+        }
+
+        $category = Product::findOrFail($id);
+
+        $oldImage = $category->product_image;
+
+        if ($request->hasFile('product_image')) {
+            // Validate and upload new image
+            $image = $request->file('product_image');
+            $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension(); 
+            $image->move(public_path('product_images'), $imageName);
+
+            if ($oldImage && $oldImage !== $imageName && file_exists(public_path('product_images/' . $oldImage))) {
+                unlink(public_path('product_images/' . $oldImage));
+            }
+
+            $category->update([
+                'product_name' => $request->product_name,
+                'cat_name' => $category->cat_name, 
+                'cat_fk_id' => $request->cat_fk_id, 
+                'product_price' => $request->product_price,
+                'product_desc' => $request->product_desc,
+                'status' => $request->status,
+                'product_image' => $imageName,
+            ]);
+        } else {
+            $category->update([
+                'product_name' => $request->product_name,
+                'cat_name' => $category->cat_name, 
+                'cat_fk_id' => $request->cat_fk_id, 
+                'product_price' => $request->product_price,
+                'product_desc' => $request->product_desc,
+                'status' => $request->status,
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Category updated successfully.');
+    }
 
     public function borrowed()
     {

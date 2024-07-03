@@ -21,8 +21,13 @@
                         <form action="https://themewagon.github.io/fruitkha/index.html">
                             <input type="number" placeholder="0">
                         </form>
-                        <a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Buy Now</a>
-                        <a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Borrow</a>
+                        @if ($product->status == 'Not Available')
+                            <a href="javascript:void(0);" class="cart-btn disabled"><i class="fas fa-shopping-cart"></i> Buy Now</a>
+                            <a href="javascript:void(0);" class="cart-btn disabled"><i class="fas fa-shopping-cart"></i> Borrow</a>
+                        @else
+                            <a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Buy Now</a>
+                            <a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Borrow</a>
+                        @endif
                         <p><strong>Category: </strong>{{ $product->cat_name }}</p>
                     </div>
                     <h4>Share:</h4>
@@ -56,20 +61,20 @@
         </div>
 
         <div class="row product-lists">
-            @foreach($products as $item)
-            <div class="col-lg-4 col-md-6 text-center {{ strtolower($item->cat_name) }}">
-                <div class="single-product-item">
-                    <div class="product-image">
-                        <a href="{{ url('/product_details_' . $item->id) }}"><img src="product_images/{{ $item->product_image }}" alt=""></a>
-                    </div>
-                    <h3>{{ $item->product_name }}</h3>
-                    <p class="product-price"><span>{{ $item->product_desc }}</span> {{ $item->product_price }}$ </p>
-                    <a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Borrow</a>
-                    <a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
-                </div>
-            </div>
-            @endforeach
-        </div>
+				@foreach($products as $item)
+				<div class="col-lg-4 col-md-6 text-center {{ strtolower($item->cat_name) }}">
+					<div class="single-product-item">
+						<div class="product-image">
+							<a href="{{ url('/product_details_' . $item->id) }}"><img src="product_images/{{ $item->product_image }}" alt=""></a>
+						</div>
+						<h3>{{ $item->product_name }}</h3>
+						<p class="product-price"><span>{{ $item->product_desc }}</span> {{ $item->product_price }}$ </p>
+						<a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Borrow</a>
+						<a href="javascript:void(0);" class="cart-btn add-to-cart" data-product-id="{{ $item->id }}"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+					</div>
+				</div>
+				@endforeach
+			</div>
 
         <div class="row">
             <div class="col-lg-12 text-center">
@@ -87,5 +92,39 @@
     </div>
 </div>
 <!-- end products -->
+<script src="jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"/>
+<script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+<script>
+    // Set position and delay
+    alertify.set('notifier', 'position', 'top-right');
 
-	@include('user/footer')
+    $(document).ready(function() {
+        $('.add-to-cart').on('click', function() {
+            var productId = $(this).data('product-id');
+
+            $.ajax({
+                url: '{{ url("/add-to-cart") }}',
+                method: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    product_id: productId
+                },
+                success: function(response) {
+                    if (response.success) {
+                        alertify.success(response.message);
+                    } else {
+                        alertify.error('Failed to add product to cart.');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                    alertify.error('An error occurred. Please try again.');
+                }
+            });
+        });
+    });
+</script>
+
+@include('user/footer')

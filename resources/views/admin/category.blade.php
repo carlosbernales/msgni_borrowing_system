@@ -110,16 +110,7 @@
 		<!-- /.content -->
 	  </div>
   </div>
+  
 
-  <script>
-    function showModal(categoryId) {
-        var modalId = '#category_edit_' + categoryId;
-        var modalElement = document.querySelector(modalId);
-        var bootstrapModal = new bootstrap.Modal(modalElement);
-        bootstrapModal.show();
-    }
-</script>
-
-	
-
+  <script src="admin/admin_scripts.js"></script>
   @include('admin/table_footer')

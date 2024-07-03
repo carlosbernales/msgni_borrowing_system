@@ -28,6 +28,7 @@
                                             <th>Image</th>
                                             <th>Price</th>
                                             <th>Description</th>
+                                            <th>Status</th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -50,6 +51,9 @@
                                             <td onclick="showModal('{{ $product->id }}')">
                                                 {{ $product->product_desc }}
                                             </td>
+                                            <td onclick="showModal('{{ $product->id }}')">
+                                                {{ $product->status }}
+                                            </td>
                                             <td>
                                                 <form action="/delete_category/{{ $product->id }}" method="POST" class="d-inline">
                                                     @csrf
@@ -66,13 +70,46 @@
                                                         <h5 class="modal-title">Edit Product</h5>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
-                                                    <form method="POST" action="/edit_category/{{ $product->id }}">
+                                                    <form method="POST" action="/edit_product/{{ $product->id }}" enctype="multipart/form-data">
                                                         @csrf
                                                         @method('PUT')
                                                         <div class="modal-body">
                                                             <div class="mb-3">
-                                                                <label for="inputField" class="form-label">Category Name</label>
+                                                                <label for="category" class="form-label">Select Category:</label>
+                                                                <select name="cat_fk_id" id="category" class="form-control">
+                                                                    @foreach($category as $cat)
+                                                                        <option value="{{ $cat->id }}">{{ $cat->cat_name }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="inputField" class="form-label">Product Name</label>
                                                                 <input type="text" class="form-control" name="product_name" value="{{ $product->product_name }}">
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="inputField" class="form-label">Price</label>
+                                                                <input type="number" class="form-control" name="product_price" step="0.01" value="{{ $product->product_price }}">
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="inputField" class="form-label">Description</label>
+                                                                <input type="text" class="form-control" name="product_desc" value="{{ $product->product_desc }}">
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="inputField" class="form-label">Status</label>
+                                                                <select name="status"  class="form-control">
+                                                                    <option value="{{ $product->status }}">{{ $product->status }}</option>
+                                                                    @if ($product->status == 'Available')
+                                                                        <option value="Not Available">Not Available</option>
+                                                                    @else
+                                                                        <option value="Available">Available</option>
+                                                                    @endif
+                                                                </select>
+                                                            </div>
+
+                                                            <div class="mb-3">
+                                                                <label for="inputField" class="form-label">Image</label>
+                                                                <input type="file" class="form-control" name="product_image" value="">
+                                                                <input type="hidden" name="old_image" value="{{ $product->product_image }}">
                                                             </div>
                                                         </div>
                                                         <div class="modal-footer modal-footer-uniform">
@@ -126,7 +163,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="inputField" class="form-label">Product Price</label>
-                                <input type="text" class="form-control" name="product_price" >
+                                <input type="number" class="form-control" step="0.01" name="product_price" >
                             </div>
                             <div class="mb-3">
                                 <label for="inputField" class="form-label">Product Description</label>
@@ -151,15 +188,7 @@
 	  </div>
   </div>
 
-  <script>
-    function showModal(categoryId) {
-        var modalId = '#product_edit_' + categoryId;
-        var modalElement = document.querySelector(modalId);
-        var bootstrapModal = new bootstrap.Modal(modalElement);
-        bootstrapModal.show();
-    }
-</script>
 
-	
+  <script src="admin/admin_scripts.js"></script>
 
   @include('admin/table_footer')

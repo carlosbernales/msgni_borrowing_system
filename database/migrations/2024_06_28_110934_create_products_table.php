@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('product_name');
             $table->string('product_desc');
             $table->string('product_price');
+            $table->enum('status', ['Available', 'Not Available'])->default('Available');
             $table->string('product_image')->nullable();
             $table->timestamps();
         });
