@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Product extends Model
+class Order_Item extends Model
 {
     use HasFactory;
 
-    protected $table = 'products';
+    protected $table = 'order_item';
 
     protected $primaryKey = 'id';
 
@@ -23,18 +23,17 @@ class Product extends Model
 
     // Define the fillable attributes (mass assignable)
     protected $fillable = [
-                            'cat_fk_id', 
-                            'cat_name', 
-                            'product_name', 
-                            'product_name',
-                            'status', 
-                            'product_desc', 
                             'product_price', 
-                            'product_image', 
-                            'stocks', 
-                            'stock_price', 
+                            'order_fk_id', 
+                            'product_fk_id', 
+                            'quantity',
                         ];
 
     // Define the guarded attributes (not mass assignable)
     // protected $guarded = ['id']
+
+    public function order()
+    {
+        return $this->belongsTo(Order::class, 'order_fk_id', 'id');
+    }
 }

@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Cart;
+use App\Models\Account;
+use App\Models\Order;
+use App\Models\Order_Item;
+
 
 
 class UserController extends Controller
@@ -90,6 +94,7 @@ class UserController extends Controller
         ]);
     }
 
+
     public function cart_update(Request $request)
     {
         $request->validate([
@@ -117,22 +122,70 @@ class UserController extends Controller
         return response()->json(['message' => 'Item removed from cart successfully']);
     }
 
-    public function check_out()
+    public function checkout($user_id)
     {
-        if (!session()->has('user_id')) {
-            return redirect('/');
+        $user = Account::find($user_id);
+        if (!$user) {
+            return redirect('/')->with('error', 'User not found');
         }
-        $product = Product::all();
-        $category = Category::all();
-    
-        return view('user.check_out', 
-            ['product' => $product],
-            ['category' => $category]);
+
+        $cartItems = Cart::where('user_fk_id', $user_id)->get();
+
+        $productIds = $cartItems->pluck('fk_product_id')->toArray();
+        $products = Product::whereIn('id', $productIds)->get();
+
+        return view('user.check_out', [
+            'user_id' => $user_id,
+            'cartItems' => $cartItems,
+            'products' => $products,
+            'user' => $user
+        ]);
     }
 
+    public function placeOrder(Request $request)
+    {
+        $request->validate([
+            'others' => 'nullable|string',
+        ]);
 
+        $user = auth()->user();
+        if (!$user) {
+            return redirect('/')->with('error', 'User not found');
+        }
 
+        $cartItems = Cart::where('user_fk_id', $user->id)->get();
+        $productIds = $cartItems->pluck('fk_product_id')->toArray();
+        $products = Product::whereIn('id', $productIds)->get();
+        $orderTotal = $cartItems->sum(function($cartItem) use ($products) {
+            return $cartItem->cart_qty * $products->where('id', $cartItem->fk_product_id)->first()->product_price;
+        });
 
+        $order = new Order();
+        $order->fullname = $user->firstname . ' ' . $user->lastname;
+        $order->email = $user->email;
+        $order->phone_no = $user->phone_no;
+        $order->others = $request->input('others') ?? '';
+        $order->order_status = 'Pending';
+        $order->order_total = $orderTotal;
+        $order->user_fk_id = $user->id;
+        $order->order_id = strtoupper(uniqid('ORD-'));
+        $order->save();
 
+        foreach ($cartItems as $cartItem) {
+            $product = $products->where('id', $cartItem->fk_product_id)->first();
+            $productTotal = $cartItem->cart_qty * $product->product_price;
+
+            $orderItem = new Order_Item();
+            $orderItem->order_fk_id = $order->id; 
+            $orderItem->product_fk_id = $product->id;
+            $orderItem->quantity = $cartItem->cart_qty;
+            $orderItem->product_price = $product->product_price;
+            $orderItem->save();
+        }
+
+        Cart::where('user_fk_id', $user->id)->delete();
+
+        return redirect('/')->with('success', 'Order placed successfully!');
+    }
 
 }

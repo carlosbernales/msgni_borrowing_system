@@ -53,8 +53,10 @@ Route::match(['get', 'post'], '/cart', [UserController::class, 'cart']);
 
 Route::match(['get', 'post'], '/cart_update', [UserController::class, 'cart_update']);
 Route::match(['get', 'post'], '/cart_remove', [UserController::class, 'cart_remove']);
+Route::match(['get', 'post'], '/checkout.{user_id}', [UserController::class, 'checkout']);
 
-Route::match(['get', 'post'], '/check_out', [UserController::class, 'check_out']);
+Route::match(['get', 'post'], '/place-order', [UserController::class, 'placeOrder']);
+
 
 
 

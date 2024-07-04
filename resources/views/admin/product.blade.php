@@ -26,7 +26,9 @@
                                             <th>Category</th>
                                             <th>Name</th>
                                             <th>Image</th>
-                                            <th>Price</th>
+                                            <th>Stock Price</th>
+                                            <th>Selling Price</th>
+                                            <th>Stocks</th>
                                             <th>Description</th>
                                             <th>Status</th>
                                             <th></th>
@@ -44,9 +46,15 @@
                                             <td onclick="showModal('{{ $product->id }}')">
                                                 <img src="product_images/{{ $product->product_image }}" alt="Product Image" width="150" height="100">
                                             </td>
+                                            <td onclick="showModal('{{ $product->id }}')">
+                                                {{ $product->stock_price }}
+                                            </td>
 
                                             <td onclick="showModal('{{ $product->id }}')">
                                                 {{ $product->product_price }}
+                                            </td>
+                                            <td onclick="showModal('{{ $product->id }}')">
+                                                {{ $product->stocks }}
                                             </td>
                                             <td onclick="showModal('{{ $product->id }}')">
                                                 {{ $product->product_desc }}
@@ -87,8 +95,16 @@
                                                                 <input type="text" class="form-control" name="product_name" value="{{ $product->product_name }}">
                                                             </div>
                                                             <div class="mb-3">
-                                                                <label for="inputField" class="form-label">Price</label>
+                                                                <label for="inputField" class="form-label">Stock Price</label>
+                                                                <input type="number" class="form-control" name="stock_price" step="0.01" value="{{ $product->stock_price }}">
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="inputField" class="form-label">Selling Price</label>
                                                                 <input type="number" class="form-control" name="product_price" step="0.01" value="{{ $product->product_price }}">
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="inputField" class="form-label">Quantity</label>
+                                                                <input type="number" class="form-control" name="stocks" >
                                                             </div>
                                                             <div class="mb-3">
                                                                 <label for="inputField" class="form-label">Description</label>
@@ -162,8 +178,18 @@
                                 <input type="text" class="form-control" name="product_name" >
                             </div>
                             <div class="mb-3">
-                                <label for="inputField" class="form-label">Product Price</label>
+                                <label for="inputField" class="form-label">Selling Price</label>
                                 <input type="number" class="form-control" step="0.01" name="product_price" >
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="inputField" class="form-label">Stock Price</label>
+                                <input type="number" class="form-control" step="0.01" name="stock_price" >
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="inputField" class="form-label">Quantity</label>
+                                <input type="number" class="form-control" name="stocks" >
                             </div>
                             <div class="mb-3">
                                 <label for="inputField" class="form-label">Product Description</label>

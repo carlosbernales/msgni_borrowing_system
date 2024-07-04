@@ -94,6 +94,8 @@ class AdminController extends Controller
                 'cat_fk_id' => $request->cat_fk_id, 
                 'product_price' => $request->product_price,
                 'product_desc' => $request->product_desc,
+                'stocks' => $request->stocks,
+                'stock_price' => $request->stock_price,
                 'product_image' => $imageName,
             ]);
 
@@ -110,9 +112,9 @@ class AdminController extends Controller
             return redirect('/');
         }
 
-        $category = Product::findOrFail($id);
+        $products = Product::findOrFail($id);
 
-        $oldImage = $category->product_image;
+        $oldImage = $products->product_image;
 
         if ($request->hasFile('product_image')) {
             // Validate and upload new image
@@ -123,24 +125,30 @@ class AdminController extends Controller
             if ($oldImage && $oldImage !== $imageName && file_exists(public_path('product_images/' . $oldImage))) {
                 unlink(public_path('product_images/' . $oldImage));
             }
+            $category = Category::findOrFail($request->cat_fk_id);
 
-            $category->update([
+            $products->update([
                 'product_name' => $request->product_name,
                 'cat_name' => $category->cat_name, 
                 'cat_fk_id' => $request->cat_fk_id, 
                 'product_price' => $request->product_price,
                 'product_desc' => $request->product_desc,
                 'status' => $request->status,
+                'stocks' => $products->stocks + $request->stocks,
+                'stock_price' => $request->stock_price,
                 'product_image' => $imageName,
             ]);
         } else {
-            $category->update([
+            $category = Category::findOrFail($request->cat_fk_id);
+            $products->update([
                 'product_name' => $request->product_name,
                 'cat_name' => $category->cat_name, 
                 'cat_fk_id' => $request->cat_fk_id, 
                 'product_price' => $request->product_price,
                 'product_desc' => $request->product_desc,
                 'status' => $request->status,
+                'stocks' => $products->stocks + $request->stocks,
+                'stock_price' => $request->stock_price,
             ]);
         }
 
