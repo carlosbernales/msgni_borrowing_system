@@ -5,6 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Order;
+use App\Models\Order_Item;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\OrderAccepted;
+use App\Models\Borrow;
 
 
 class AdminController extends Controller
@@ -117,7 +122,6 @@ class AdminController extends Controller
         $oldImage = $products->product_image;
 
         if ($request->hasFile('product_image')) {
-            // Validate and upload new image
             $image = $request->file('product_image');
             $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension(); 
             $image->move(public_path('product_images'), $imageName);
@@ -155,21 +159,42 @@ class AdminController extends Controller
         return redirect()->back()->with('success', 'Category updated successfully.');
     }
 
+    
+
+    public function order()
+    {
+        if (!session()->has('admin_id')) {
+            return redirect('/');
+        }
+
+        $orders = Order::with(['orderItems.product'])
+                    ->where('order_status', 'Pending')
+                    ->get();
+
+        return view('admin.orders', ['orders' => $orders]);
+    }
+
+    public function acceptOrder(Order $order)
+    {
+        $order->update(['order_status' => 'Accepted']);
+
+        Mail::to($order->email)->send(new OrderAccepted($order));
+
+        return redirect()->back()->with('status', 'Order accepted successfully.');
+    }
+
     public function borrowed()
     {
         if (!session()->has('admin_id')) {
             return redirect('/');
         }
-        // $categories = Category::all();
-    
-        // return view('admin.category', ['categories' => $categories]);
-        return view('admin.borrowed');
 
+        // Eager load products related to borrowed items
+        $borrowed = Borrow::with('product')->get();
+
+        return view('admin.borrowed', [
+            'borrowed' => $borrowed,
+        ]);
     }
-
-
-    
-
-
 
 }

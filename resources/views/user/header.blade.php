@@ -34,6 +34,9 @@
 	<!-- responsive -->
 	<link rel="stylesheet" href="template/assets/css/responsive.css">
 
+	<!-- CHATTT PATHSS Style-->    
+	<link rel="stylesheet" href="admin/main-horizontal/css/style.css">
+
 </head>
 <body>
 	

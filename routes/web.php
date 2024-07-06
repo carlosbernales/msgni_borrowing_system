@@ -39,8 +39,12 @@ Route::put('/edit_category/{id}', [AdminController::class, 'category_edit']);
 Route::delete('/delete_category/{id}', [AdminController::class, 'delete_category']);
 Route::match(['get', 'post'], '/products', [AdminController::class, 'products']);
 Route::match(['get', 'post'], '/add_products', [AdminController::class, 'add_product']);
-Route::match(['get', 'post'], '/borrowed', [AdminController::class, 'borrowed']);
 Route::put('/edit_product/{id}', [AdminController::class, 'edit_product']);
+Route::match(['get', 'post'], '/order', [AdminController::class, 'order']);
+Route::put('/accept_order/{order}', [AdminController::class, 'acceptOrder']);
+Route::match(['get', 'post'], '/pending_borrowed', [AdminController::class, 'borrowed']);
+
+
 
 
 
@@ -50,12 +54,16 @@ Route::match(['get', 'post'], '/home', [UserController::class, 'home']);
 Route::match(['get', 'post'], '/product_details_{id}', [UserController::class, 'product_details']);
 Route::match(['get', 'post'], '/add-to-cart', [UserController::class, 'addToCart']);
 Route::match(['get', 'post'], '/cart', [UserController::class, 'cart']);
-
 Route::match(['get', 'post'], '/cart_update', [UserController::class, 'cart_update']);
 Route::match(['get', 'post'], '/cart_remove', [UserController::class, 'cart_remove']);
 Route::match(['get', 'post'], '/checkout.{user_id}', [UserController::class, 'checkout']);
-
 Route::match(['get', 'post'], '/place-order', [UserController::class, 'placeOrder']);
+
+Route::post('/upload_borrow', [UserController::class, 'upload_borrow']);
+
+
+
+
 
 
 

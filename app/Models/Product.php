@@ -37,4 +37,5 @@ class Product extends Model
 
     // Define the guarded attributes (not mass assignable)
     // protected $guarded = ['id']
+
 }

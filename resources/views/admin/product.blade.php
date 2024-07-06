@@ -46,12 +46,12 @@
                                             <td onclick="showModal('{{ $product->id }}')">
                                                 <img src="product_images/{{ $product->product_image }}" alt="Product Image" width="150" height="100">
                                             </td>
-                                            <td onclick="showModal('{{ $product->id }}')">
-                                                {{ $product->stock_price }}
+                                            <td onclick="showModal('{{ $product->id }}')">₱
+                                                {{ number_format($product->stock_price, 2) }}
                                             </td>
 
-                                            <td onclick="showModal('{{ $product->id }}')">
-                                                {{ $product->product_price }}
+                                            <td onclick="showModal('{{ $product->id }}')">₱
+                                                {{ number_format($product->product_price, 2) }}
                                             </td>
                                             <td onclick="showModal('{{ $product->id }}')">
                                                 {{ $product->stocks }}
@@ -86,7 +86,9 @@
                                                                 <label for="category" class="form-label">Select Category:</label>
                                                                 <select name="cat_fk_id" id="category" class="form-control">
                                                                     @foreach($category as $cat)
-                                                                        <option value="{{ $cat->id }}">{{ $cat->cat_name }}</option>
+                                                                        <option value="{{ $cat->id }}" {{ $cat->id == $product->cat_fk_id ? 'selected' : '' }}>
+                                                                            {{ $cat->cat_name }}
+                                                                        </option>
                                                                     @endforeach
                                                                 </select>
                                                             </div>

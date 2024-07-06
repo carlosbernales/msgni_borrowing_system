@@ -9,8 +9,7 @@ use App\Models\Cart;
 use App\Models\Account;
 use App\Models\Order;
 use App\Models\Order_Item;
-
-
+use App\Models\Borrow;
 
 class UserController extends Controller
 {
@@ -20,12 +19,18 @@ class UserController extends Controller
         if (!session()->has('user_id')) {
             return redirect('/');
         }
+
+        $userId = session('user_id');
+        $account = Account::find($userId);
+
         $product = Product::all();
         $category = Category::all();
-    
-        return view('user.home', 
-            ['product' => $product],
-            ['category' => $category]);
+
+        return view('user.home', [
+            'product' => $product,
+            'category' => $category,
+            'account' => $account
+        ]);
     }
 
     public function product_details($id)
@@ -187,5 +192,36 @@ class UserController extends Controller
 
         return redirect('/')->with('success', 'Order placed successfully!');
     }
+
+    public function upload_borrow(Request $request)
+    {
+        $request->validate([
+            'speed_test' => 'required|image|mimes:jpeg,png,jpg,gif|max:10000', 
+        ]);
+
+        if ($request->hasFile('speed_test')) {
+            $image = $request->file('speed_test');
+            $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension(); 
+            $image->move(public_path('speed_test'), $imageName);
+
+            Borrow::create([
+                'fullname' => $request->fullname,
+                'email' => $request->email,
+                'user_fk_id' => $request->user_fk_id, 
+                'contact' => $request->contact,
+                'speed_test' => $imageName,
+                'product_fk_id' => $request->product_fk_id, 
+            ]);
+
+            return redirect()->back()->with('success', 'Borrow added successfully.');
+        }
+
+        return redirect()->back()->with('error', 'Failed to add product. Please upload a valid image.');
+    }
+
+
+    
+
+
 
 }

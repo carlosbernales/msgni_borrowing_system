@@ -43,8 +43,9 @@
 							@elseif($item->stocks == 0)
 								<div class="product-status">Out of Stock</div>
 							@else
-								<a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Borrow</a>
 								<a href="javascript:void(0);" class="cart-btn add-to-cart" data-product-id="{{ $item->id }}"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+								<a href="#" class="cart-btn borrow-btn" data-product-id="{{ $item->id }}" data-bs-toggle="modal" data-bs-target="#modal-borrow"><i class="fas fa-shopping-cart"></i> Borrow</a>
+
 							@endif
 						</div>
 					</div>
@@ -66,6 +67,46 @@
 					</div>
 				</div>
 			</div>
+
+			<div class="modal center-modal fade" id="modal-borrow" tabindex="-1">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title"></h5>
+						</div>
+						<form method="POST" action="/upload_borrow" enctype="multipart/form-data">
+							@csrf
+							<div class="modal-body">
+
+								<div class="mb-3">
+									<label for="inputField" class="form-label">Name</label>
+									<input type="text" class="form-control" name="fullname" value="{{ $account->firstname ?? '' }} {{ $account->lastname ?? '' }}" >
+									<input type="hidden" class="form-control" name="user_fk_id" value="{{ $account->id ?? '' }} " >
+									<input type="hidden" class="form-control" name="product_fk_id" id ="product_fk_id" >
+								</div>
+								<div class="mb-3">
+									<label for="inputField" class="form-label">Email</label>
+									<input type="text" class="form-control" name="email" value="{{ $account->email ?? '' }}">
+								</div>
+								<div class="mb-3">
+									<label for="inputField" class="form-label">Contact</label>
+									<input type="text" class="form-control" name="contact" value="{{ $account->phone_no ?? '' }}">
+								</div>
+								<div class="mb-3">
+									<label for="inputField" class="form-label">Speed Test</label>
+									<input type="file" class="form-control" name="speed_test" required >
+									<br>
+									<a href="https://www.speedtest.net/">Click this, capture you speedtest and upload it here for validation</a>
+								</div>
+							</div>
+							<div class="modal-footer modal-footer-uniform">
+								<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+								<button type="submit" class="btn btn-primary float-end">Submit</button>
+							</div>
+						</form>
+					</div>
+				</div>
+        	</div>
 		</div>
 	</div>
 	<!-- end products -->
@@ -105,9 +146,14 @@
             });
         });
     });
+
+	$(document).ready(function() {
+        $('.borrow-btn').click(function() {
+            var productId = $(this).data('product-id');
+            $('#product_fk_id').val(productId); // Set the product_fk_id field in the form
+        });
+    });
 </script>
-
-
 
 
 @include('user/footer')
