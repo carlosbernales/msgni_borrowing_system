@@ -28,7 +28,8 @@
                                             <th>Image</th>
                                             <th>Stock Price</th>
                                             <th>Selling Price</th>
-                                            <th>Stocks</th>
+                                            <th>Selling Stocks</th>
+                                            <th>Borrow Stocks</th>
                                             <th>Description</th>
                                             <th>Status</th>
                                             <th></th>
@@ -55,6 +56,9 @@
                                             </td>
                                             <td onclick="showModal('{{ $product->id }}')">
                                                 {{ $product->stocks }}
+                                            </td>
+                                            <td onclick="showModal('{{ $product->id }}')">
+                                                {{ $product->borrow_stocks }}
                                             </td>
                                             <td onclick="showModal('{{ $product->id }}')">
                                                 {{ $product->product_desc }}
@@ -105,8 +109,12 @@
                                                                 <input type="number" class="form-control" name="product_price" step="0.01" value="{{ $product->product_price }}">
                                                             </div>
                                                             <div class="mb-3">
-                                                                <label for="inputField" class="form-label">Quantity</label>
+                                                                <label for="inputField" class="form-label">Selling Quantity</label>
                                                                 <input type="number" class="form-control" name="stocks" >
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="inputField" class="form-label">Borrow Quantity</label>
+                                                                <input type="number" class="form-control" name="borrow_stocks" >
                                                             </div>
                                                             <div class="mb-3">
                                                                 <label for="inputField" class="form-label">Description</label>
@@ -190,8 +198,13 @@
                             </div>
 
                             <div class="mb-3">
-                                <label for="inputField" class="form-label">Quantity</label>
+                                <label for="inputField" class="form-label">Selling Quantity</label>
                                 <input type="number" class="form-control" name="stocks" >
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="inputField" class="form-label">Borrow Quantity</label>
+                                <input type="number" class="form-control" name="borrow_stocks" >
                             </div>
                             <div class="mb-3">
                                 <label for="inputField" class="form-label">Product Description</label>
@@ -218,5 +231,13 @@
 
 
   <script src="admin/admin_scripts.js"></script>
+  <script>
+    function showModal(categoryId) {
+        var modalId = '#product_edit_' + categoryId;
+        var modalElement = document.querySelector(modalId);
+        var bootstrapModal = new bootstrap.Modal(modalElement);
+        bootstrapModal.show();
+    }
+  </script>
 
   @include('admin/table_footer')

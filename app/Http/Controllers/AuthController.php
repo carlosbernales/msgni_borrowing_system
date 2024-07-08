@@ -79,6 +79,9 @@ class AuthController extends Controller
             } elseif ($user->role == 'Superadmin') {
                 session(['superadmin_id' => $user->id]); 
                 return redirect('/dashboard');
+            } elseif ($user->role == 'IT') {
+                session(['it_id' => $user->id]); 
+                return redirect('/dashboard');
             }
         }
         return redirect('/account/login')

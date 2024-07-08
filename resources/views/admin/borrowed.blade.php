@@ -30,59 +30,68 @@
 										</tr>
 									</thead>
 									<tbody>
-										@foreach ($borrowed as $borrowed)
-										<tr>
-											<td>{{ $borrowed->product->product_name }}</td>
-											<td>
-												<button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#product_image_modal_{{ $borrowed->id }}">
-													<i class="fa fa-eye"></i>
-												</button>
-											<!-- Product Image Modal -->
-												<div class="modal center-modal fade" id="product_image_modal_{{ $borrowed->id }}" tabindex="-1">
-													<div class="modal-dialog">
-														<div class="modal-content">
-															<div class="modal-header">
-																<h5 class="modal-title">{{ $borrowed->product->product_name }}</h5>
-																<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-															</div>
-															<div class="modal-body">
-																<img src="/product_images/{{ $borrowed->product->product_image }}" alt="{{ $borrowed->product->product_name }}" style="max-width: 100%; height: auto;">
-															</div>
-														</div>
-													</div>
-												</div>
-											</td>
-											<td>{{ $borrowed->fullname }}</td>
-											<td>{{ $borrowed->contact }}</td>
-											<td>
-												<button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#speed_test_modal_{{ $borrowed->id }}">
-													<i class="fa fa-eye"></i>
-												</button>
-												<!-- Speed Test Modal -->
-												<div class="modal center-modal fade" id="speed_test_modal_{{ $borrowed->id }}" tabindex="-1">
-													<div class="modal-dialog">
-														<div class="modal-content">
-															<div class="modal-header">
-																<h5 class="modal-title">Speed Test</h5>
-																<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-															</div>
-															<div class="modal-body">
-																<img src="/speed_test/{{ $borrowed->speed_test }}" style="max-width: 100%; height: auto;">
+									@foreach ($borrowed as $borrowed)
+										@if(!(session('admin_id') && $borrowed->borrow_status === 'pending_it'))
+											<tr>
+												<td>{{ $borrowed->product->product_name }}</td>
+												<td>
+													<button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#product_image_modal_{{ $borrowed->id }}">
+														<i class="fa fa-eye"></i>
+													</button>
+													<!-- Product Image Modal -->
+													<div class="modal center-modal fade" id="product_image_modal_{{ $borrowed->id }}" tabindex="-1">
+														<div class="modal-dialog">
+															<div class="modal-content">
+																<div class="modal-header">
+																	<h5 class="modal-title">{{ $borrowed->product->product_name }}</h5>
+																	<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+																</div>
+																<div class="modal-body">
+																	<img src="/product_images/{{ $borrowed->product->product_image }}" alt="{{ $borrowed->product->product_name }}" style="max-width: 100%; height: auto;">
+																</div>
 															</div>
 														</div>
 													</div>
-												</div>
-											</td>
-											<td>{{ $borrowed->borrow_status }}</td>
-											<td>
-												<form action="/delete_category/{{ $borrowed->id }}" method="POST" class="d-inline">
-													@csrf
-													@method('DELETE')
-													<button type="submit" class="btn btn-danger btn-sm">Deny</button>
-												</form>
-											</td>
-										</tr>
-										@endforeach
+												</td>
+												<td>{{ $borrowed->fullname }}</td>
+												<td>{{ $borrowed->contact }}</td>
+												<td>
+													<button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#speed_test_modal_{{ $borrowed->id }}">
+														<i class="fa fa-eye"></i>
+													</button>
+													<!-- Speed Test Modal -->
+													<div class="modal center-modal fade" id="speed_test_modal_{{ $borrowed->id }}" tabindex="-1">
+														<div class="modal-dialog">
+															<div class="modal-content">
+																<div class="modal-header">
+																	<h5 class="modal-title">Speed Test</h5>
+																	<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+																</div>
+																<div class="modal-body">
+																	<img src="/speed_test/{{ $borrowed->speed_test }}" style="max-width: 100%; height: auto;">
+																</div>
+															</div>
+														</div>
+													</div>
+												</td>
+												<td>{{ $borrowed->borrow_status }}</td>
+												<td>
+												@if(!(session('it_id') && $borrowed->borrow_status === 'pending_admin'))
+													<form action="/delete_category/{{ $borrowed->id }}" method="POST" class="d-inline">
+														@csrf
+														@method('DELETE')
+														<button type="submit" class="btn btn-primary btn-sm">Approve</button>
+													</form>
+													<form action="/delete_category/{{ $borrowed->id }}" method="POST" class="d-inline">
+														@csrf
+														@method('DELETE')
+														<button type="submit" class="btn btn-danger btn-sm">Deny</button>
+													</form>
+												@endif
+												</td>
+											</tr>
+										@endif
+									@endforeach
 									</tbody>
 								</table>
                             </div>

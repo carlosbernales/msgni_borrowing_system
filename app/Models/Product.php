@@ -33,6 +33,7 @@ class Product extends Model
                             'product_image', 
                             'stocks', 
                             'stock_price', 
+                            'borrow_stocks'
                         ];
 
     // Define the guarded attributes (not mass assignable)

@@ -8,6 +8,10 @@
     margin-top: 10px; /* Example: Spacing above the status */
     font-weight: bold; /* Example: Bold text */
 }
+.alertify-notifier .ajs-message.ajs-danger {
+    background-color: #dc3545;
+    color: white;
+}
 </style>
 	
 	<!-- products -->
@@ -38,19 +42,27 @@
 							</div>
 							<h3>{{ $item->product_name }}</h3>
 							<p class="product-price"><span>{{ $item->product_desc }}</span>₱ {{ $item->product_price }}</p>
+
 							@if(strtolower($item->status) === 'not available')
 								<div class="product-status">Not Available</div>
-							@elseif($item->stocks == 0)
+							@elseif($item->stocks == 0 && $item->borrow_stocks == 0)
 								<div class="product-status">Out of Stock</div>
+							@elseif($item->stocks == 0 && $item->borrow_stocks != 0)
+								<a href="javascript:void(0);" class="cart-btn borrow-btn" data-product-id="{{ $item->id }}" data-borrow-stocks="{{ $item->borrow_stocks }}" data-bs-toggle="modal" data-bs-target="#modal-borrow"><i class="fas fa-shopping-cart"></i> Borrow</a>
+								<a href="javascript:void(0);" class="cart-btn add-to-cart disabled" data-product-id="{{ $item->id }}" data-stocks="{{ $item->stocks }}" aria-disabled="true"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+							@elseif($item->borrow_stocks == 0 && $item->stocks != 0)
+								<a href="javascript:void(0);" class="cart-btn add-to-cart" data-product-id="{{ $item->id }}" data-stocks="{{ $item->stocks }}"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+								<a href="javascript:void(0);" class="cart-btn borrow-btn disabled" data-product-id="{{ $item->id }}" data-borrow-stocks="{{ $item->borrow_stocks }}" aria-disabled="true"><i class="fas fa-shopping-cart"></i> Borrow</a>
 							@else
-								<a href="javascript:void(0);" class="cart-btn add-to-cart" data-product-id="{{ $item->id }}"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
-								<a href="#" class="cart-btn borrow-btn" data-product-id="{{ $item->id }}" data-bs-toggle="modal" data-bs-target="#modal-borrow"><i class="fas fa-shopping-cart"></i> Borrow</a>
-
+								<a href="javascript:void(0);" class="cart-btn add-to-cart" data-product-id="{{ $item->id }}" data-stocks="{{ $item->stocks }}"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+								<a href="javascript:void(0);" class="cart-btn borrow-btn" data-product-id="{{ $item->id }}" data-borrow-stocks="{{ $item->borrow_stocks }}" data-bs-toggle="modal" data-bs-target="#modal-borrow"><i class="fas fa-shopping-cart"></i> Borrow</a>
 							@endif
 						</div>
 					</div>
 				@endforeach
 			</div>
+
+
 
 
 
@@ -118,41 +130,64 @@
 
 
 <script>
-    // Set position and delay
-    alertify.set('notifier', 'position', 'top-right');
+alertify.set('notifier', 'position', 'top-right');
 
-    $(document).ready(function() {
-        $('.add-to-cart').on('click', function() {
-            var productId = $(this).data('product-id');
+$(document).ready(function() {
+	$('.add-to-cart').on('click', function() {
+		var productId = $(this).data('product-id');
 
-            $.ajax({
-                url: '{{ url("/add-to-cart") }}',
-                method: 'POST',
-                data: {
-                    _token: '{{ csrf_token() }}',
-                    product_id: productId
-                },
-                success: function(response) {
-                    if (response.success) {
-                        alertify.success(response.message);
-                    } else {
-                        alertify.error('Failed to add product to cart.');
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error(xhr.responseText);
-                    alertify.error('An error occurred. Please try again.');
-                }
-            });
-        });
-    });
+		$.ajax({
+			url: '{{ url("/add-to-cart") }}',
+			method: 'POST',
+			data: {
+				_token: '{{ csrf_token() }}',
+				product_id: productId
+			},
+			success: function(response) {
+				if (response.success) {
+					alertify.success(response.message);
+				} else {
+					alertify.error('Failed to add product to cart.');
+				}
+			},
+			error: function(xhr, status, error) {
+				console.error(xhr.responseText);
+				alertify.error('An error occurred. Please try again.');
+			}
+		});
+	});
+});
 
-	$(document).ready(function() {
-        $('.borrow-btn').click(function() {
-            var productId = $(this).data('product-id');
-            $('#product_fk_id').val(productId); // Set the product_fk_id field in the form
-        });
-    });
+$(document).ready(function() {
+	$('.borrow-btn').click(function() {
+		var productId = $(this).data('product-id');
+		$('#product_fk_id').val(productId); // Set the product_fk_id field in the form
+	});
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+	alertify.set('notifier', 'position', 'top-right');
+
+	document.querySelectorAll('.borrow-btn').forEach(function(button) {
+		button.addEventListener('click', function(event) {
+			var borrowStocks = button.getAttribute('data-borrow-stocks');
+			if (borrowStocks == 0) {
+				event.preventDefault();
+				alertify.notify('No stocks available for borrowing.', 'danger', 5);
+			}
+		});
+	});
+
+	document.querySelectorAll('.add-to-cart').forEach(function(button) {
+		button.addEventListener('click', function(event) {
+			var stocks = button.getAttribute('data-stocks');
+			if (stocks == 0) {
+				event.preventDefault();
+				alertify.notify('No stocks available for adding to cart.', 'danger', 5);
+			}
+		});
+	});
+});
 </script>
 
 

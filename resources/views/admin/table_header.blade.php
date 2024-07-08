@@ -186,8 +186,8 @@
 			<li><a><i class="icon-Brush"><span class="path1"></span><span class="path2"></span></i>Order</a>
 				<ul> 
 					<li><a href="/order"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Pending</a></li>
-					<li><a href="component_date_paginator.html"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Accepted</a></li>
-					<li><a href="component_media_advanced.html"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Completed</a></li>
+					<li><a href="/accepted_order"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Accepted</a></li>
+					<li><a href="/completed_orders"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Completed</a></li>
 				</ul>
 			</li>
 			<li><a href="#"><i class="icon-Chart-pie"><span class="path1"></span><span class="path2"></span></i>Borrowed</a>
@@ -198,7 +198,6 @@
 					<li><a href="charts_morris.html"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Morris</a></li>
 					<li><a href="charts_peity.html"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Peity</a></li>
 					<li><a href="charts_chartist.html"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Chartist</a></li>
-					
 				</ul>
 			</li>
 			<li><a href="#"><i class="icon-Chat-locked"><span class="path1"></span><span class="path2"></span></i>Login &amp; Error</a>

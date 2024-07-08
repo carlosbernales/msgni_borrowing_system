@@ -6,8 +6,8 @@
     <title>Order Accepted</title>
 </head>
 <body>
-    <h1>Order Accepted</h1>
-    <p>Your order (Order ID: {{ $order->order_id }}) has been accepted, please come to iSearch plus for payment and release of your order.</p>
-    <p>Thank you for you!.</p>
+    <h1>Order Completed</h1>
+    <p>Your order (Order ID: {{ $order->order_id }}) has been completed successfully.</p>
+    <p>Thank you for your business.</p>
 </body>
 </html>

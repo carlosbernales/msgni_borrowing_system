@@ -9,6 +9,7 @@ use App\Models\Order;
 use App\Models\Order_Item;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\OrderAccepted;
+use App\Mail\OrderCompleted;
 use App\Models\Borrow;
 
 
@@ -17,7 +18,7 @@ class AdminController extends Controller
 
     public function dashboard()
     {
-        if (!session()->has('admin_id')) {
+        if (!session()->has('admin_id') && !session()->has('it_id')) {
             return redirect('/');
         }
         return view('admin.dashboard');
@@ -25,7 +26,7 @@ class AdminController extends Controller
 
     public function category()
     {
-        if (!session()->has('admin_id')) {
+        if (!session()->has('admin_id') && !session()->has('it_id')) {
             return redirect('/');
         }
         $categories = Category::all();
@@ -35,7 +36,7 @@ class AdminController extends Controller
 
     public function add_category(Request $request)
     {
-        if (!session()->has('admin_id')) {
+        if (!session()->has('admin_id') && !session()->has('it_id')) {
             return redirect('/');
         }
 
@@ -48,7 +49,7 @@ class AdminController extends Controller
 
     public function category_edit(Request $request, $id)
     {
-        if (!session()->has('admin_id')) {
+        if (!session()->has('admin_id') && !session()->has('it_id')) {
             return redirect('/');
         }
 
@@ -71,7 +72,7 @@ class AdminController extends Controller
 
     public function products()
     {
-        if (!session()->has('admin_id')) {
+        if (!session()->has('admin_id') && !session()->has('it_id')) {
             return redirect('/');
         }
         $product = Product::all();
@@ -100,6 +101,7 @@ class AdminController extends Controller
                 'product_price' => $request->product_price,
                 'product_desc' => $request->product_desc,
                 'stocks' => $request->stocks,
+                'borrow_stocks' => $request->borrow_stocks,
                 'stock_price' => $request->stock_price,
                 'product_image' => $imageName,
             ]);
@@ -113,7 +115,7 @@ class AdminController extends Controller
 
     public function edit_product(Request $request, $id)
     {
-        if (!session()->has('admin_id')) {
+        if (!session()->has('admin_id') && !session()->has('it_id')) {
             return redirect('/');
         }
 
@@ -139,6 +141,7 @@ class AdminController extends Controller
                 'product_desc' => $request->product_desc,
                 'status' => $request->status,
                 'stocks' => $products->stocks + $request->stocks,
+                'borrow_stocks' => $products->borrow_stocks + $request->borrow_stocks,
                 'stock_price' => $request->stock_price,
                 'product_image' => $imageName,
             ]);
@@ -152,6 +155,7 @@ class AdminController extends Controller
                 'product_desc' => $request->product_desc,
                 'status' => $request->status,
                 'stocks' => $products->stocks + $request->stocks,
+                'borrow_stocks' => $products->borrow_stocks + $request->borrow_stocks,
                 'stock_price' => $request->stock_price,
             ]);
         }
@@ -159,11 +163,9 @@ class AdminController extends Controller
         return redirect()->back()->with('success', 'Category updated successfully.');
     }
 
-    
-
     public function order()
     {
-        if (!session()->has('admin_id')) {
+        if (!session()->has('admin_id') && !session()->has('it_id')) {
             return redirect('/');
         }
 
@@ -174,27 +176,60 @@ class AdminController extends Controller
         return view('admin.orders', ['orders' => $orders]);
     }
 
-    public function acceptOrder(Order $order)
+    public function acceptOrderMail(Order $id)
     {
-        $order->update(['order_status' => 'Accepted']);
+        $id->update(['order_status' => 'Accepted']);
 
-        Mail::to($order->email)->send(new OrderAccepted($order));
+        Mail::to($id->email)->send(new OrderAccepted($id));
 
         return redirect()->back()->with('status', 'Order accepted successfully.');
     }
 
-    public function borrowed()
+    public function accepted_order()
     {
-        if (!session()->has('admin_id')) {
+        if (!session()->has('admin_id') && !session()->has('it_id')) {
             return redirect('/');
         }
 
-        // Eager load products related to borrowed items
-        $borrowed = Borrow::with('product')->get();
+        $accepted_order = Order::with(['orderItems.product'])
+                    ->where('order_status', 'Accepted')
+                    ->get();
+
+        return view('admin.accepted_order', ['accepted_order' => $accepted_order]);
+    }
+
+    public function completedOrderMail(Order $id)
+    {
+        $id->update(['order_status' => 'Completed']);
+
+        Mail::to($id->email)->send(new OrderCompleted($id));
+
+        return redirect()->back()->with('status', 'Order completed successfully.');
+    }
+
+    public function completed_orders()
+    {
+        if (!session()->has('admin_id') && !session()->has('it_id')) {
+            return redirect('/');
+        }
+
+        $complete_order = Order::with(['orderItems.product'])
+                    ->where('order_status', 'Completed')
+                    ->get();
+
+        return view('admin.complete_orders', ['complete_order' => $complete_order]);
+    }
+
+    public function borrowedlist_pending()
+    {
+        if (!session()->has('admin_id') && !session()->has('it_id')) {
+            return redirect('/');
+        }
+        $borrowed = Borrow::with('product')
+        ->whereIn('borrow_status', ['pending_it','pending_admin'])->get();
 
         return view('admin.borrowed', [
             'borrowed' => $borrowed,
         ]);
     }
-
 }

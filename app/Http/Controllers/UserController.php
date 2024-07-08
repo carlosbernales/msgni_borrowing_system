@@ -10,6 +10,10 @@ use App\Models\Account;
 use App\Models\Order;
 use App\Models\Order_Item;
 use App\Models\Borrow;
+use App\Mail\NewOrder;
+use Illuminate\Support\Facades\Mail;
+
+
 
 class UserController extends Controller
 {
@@ -189,6 +193,8 @@ class UserController extends Controller
         }
 
         Cart::where('user_fk_id', $user->id)->delete();
+
+        Mail::to('carlosbernales24@gmail.com')->send(new NewOrder);
 
         return redirect('/')->with('success', 'Order placed successfully!');
     }

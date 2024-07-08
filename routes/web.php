@@ -41,16 +41,14 @@ Route::match(['get', 'post'], '/products', [AdminController::class, 'products'])
 Route::match(['get', 'post'], '/add_products', [AdminController::class, 'add_product']);
 Route::put('/edit_product/{id}', [AdminController::class, 'edit_product']);
 Route::match(['get', 'post'], '/order', [AdminController::class, 'order']);
-Route::put('/accept_order/{order}', [AdminController::class, 'acceptOrder']);
-Route::match(['get', 'post'], '/pending_borrowed', [AdminController::class, 'borrowed']);
-
-
-
-
+Route::put('/accept_order/{id}', [AdminController::class, 'acceptOrderMail']);
+Route::match(['get', 'post'], '/pending_borrowed', [AdminController::class, 'borrowedlist_pending']);
+Route::match(['get', 'post'], '/accepted_order', [AdminController::class, 'accepted_order']);
+Route::put('/complete_order/{id}', [AdminController::class, 'completedOrderMail']);
+Route::match(['get', 'post'], '/completed_orders', [AdminController::class, 'completed_orders']);
 
 /////////////////////USER ROUTINGS
 Route::match(['get', 'post'], '/home', [UserController::class, 'home']);
-
 Route::match(['get', 'post'], '/product_details_{id}', [UserController::class, 'product_details']);
 Route::match(['get', 'post'], '/add-to-cart', [UserController::class, 'addToCart']);
 Route::match(['get', 'post'], '/cart', [UserController::class, 'cart']);

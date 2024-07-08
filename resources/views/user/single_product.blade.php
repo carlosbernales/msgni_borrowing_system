@@ -26,21 +26,24 @@
                     <p class="single-product-pricing"> ${{ $product->product_price }}</p>
                     <p>{{ $product->product_desc }}</p>
                     <div class="single-product-form">
-                        <p><strong>Stocks: </strong>{{ $product->stocks }}</p>
+                        <p><strong>Selling Stocks: </strong>{{ $product->stocks }}</p>
+                        <p><strong>Borrow Stocks: </strong>{{ $product->borrow_stocks }}</p>
                         <p><strong>Category: </strong>{{ $product->cat_name }}</p>
-                        
                         @if ($product->status == 'Not Available' || $product->stocks == 0)
                             <a href="javascript:void(0);" class="cart-btn disabled"><i class="fas fa-shopping-cart"></i> Buy Now</a>
                             <a href="javascript:void(0);" class="cart-btn disabled"><i class="fas fa-shopping-cart"></i> Borrow</a>
-						    <a href="javascript:void(0);" class="cart-btn disabled" data-product-id="{{ $product->id }}"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
-
+                            <a href="javascript:void(0);" class="cart-btn disabled" data-product-id="{{ $product->id }}"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
                         @else
                             <a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Buy Now</a>
-                            <a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Borrow</a>
-						    <a href="javascript:void(0);" class="cart-btn add-to-cart" data-product-id="{{ $product->id }}"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
-
+                            @if ($product->borrow_stocks == 0)
+                                <a href="javascript:void(0);" class="cart-btn disabled"><i class="fas fa-shopping-cart"></i> Borrow</a>
+                            @else
+                                <a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Borrow</a>
+                            @endif
+                            <a href="javascript:void(0);" class="cart-btn add-to-cart" data-product-id="{{ $product->id }}"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
                         @endif
                     </div>
+
                     <h4>Share:</h4>
                     <ul class="product-share">
                         <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
@@ -54,6 +57,7 @@
     </div>
 </div>
 <!-- end single product -->
+ 
 
 <!-- products -->
 <div class="product-section mt-150 mb-150">
