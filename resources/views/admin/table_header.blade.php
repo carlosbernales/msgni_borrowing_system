@@ -12,7 +12,7 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
 
-    <title>Power BI Admin - Dashboard  Data Tables</title>
+    <title>MSGNI</title>
   
 	<!-- Vendors Style-->
 	<link rel="stylesheet" href="admin/main-horizontal/css/vendors_css.css">
@@ -31,27 +31,12 @@
   <header class="main-header">
 	  <div class="container">
 		  <div class="inside-header">
-			<div class="d-flex align-items-center logo-box justify-content-start">
-				<!-- Logo -->
-				<a href="index.html" class="logo">
-				  <!-- logo-->
-				  <div class="logo-lg">
-					  <span class="light-logo"><img src="admin/images/logo-light-text.png" alt="logo"></span>
-					  <span class="dark-logo"><img src="admin/images/logo-light-text.png" alt="logo"></span>
-				  </div>
-				</a>	
-			</div>  
+			 
 			<!-- Header Navbar -->
 			<nav class="navbar navbar-static-top">
 			  <!-- Sidebar toggle button-->
 			  <div class="app-menu">
-				<ul class="header-megamenu nav">
-					<li class="btn-group nav-item d-none d-md-inline-block">
-						<a href="#" data-provide="fullscreen" class="waves-effect waves-light nav-link full-screen" title="Full Screen">
-							<i class="icon-Expand-arrows"><span class="path1"></span><span class="path2"></span></i>
-						</a>
-					</li>
-				</ul> 
+				
 			  </div>
 
 			  <div class="navbar-custom-menu r-side">
@@ -59,14 +44,7 @@
 					<li class="btn-group d-lg-inline-flex d-none">
 						<div class="app-menu">
 							<div class="search-bx mx-5">
-								<form>
-									<div class="input-group">
-									  <input type="search" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="button-addon2">
-									  <div class="input-group-append">
-										<button class="btn" type="submit" id="button-addon3"><i data-feather="search"></i></button>
-									  </div>
-									</div>
-								</form>
+								
 							</div>
 						</div>
 					</li>
@@ -151,14 +129,7 @@
 					  </li>
 					</ul>
 				  </li>	
-
 				  <!-- Control Sidebar Toggle Button -->
-				  <li>
-					  <a href="#" data-toggle="control-sidebar" title="Setting" class="waves-effect waves-light">
-						<i class="icon-Settings"><span class="path1"></span><span class="path2"></span></i>
-					  </a>
-				  </li>
-
 				</ul>
 			  </div>
 			</nav>
@@ -193,11 +164,11 @@
 			<li><a href="#"><i class="icon-Chart-pie"><span class="path1"></span><span class="path2"></span></i>Borrowed</a>
 				<ul> 
 					<li><a href="/pending_borrowed"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Pending</a></li>
-					<li><a href="charts_flot.html"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Flot</a></li>
-					<li><a href="charts_inline.html"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Inline charts</a></li>
-					<li><a href="charts_morris.html"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Morris</a></li>
-					<li><a href="charts_peity.html"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Peity</a></li>
-					<li><a href="charts_chartist.html"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Chartist</a></li>
+					<li><a href="/borrowedlist_accepted"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Accepted</a></li>
+					<li><a href="/borrowedlist_completed"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Completed</a></li>
+					<li><a href="/borrowedlist_returned"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Returned</a></li>
+					<!-- <li><a href="charts_peity.html"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Peity</a></li>
+					<li><a href="charts_chartist.html"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Chartist</a></li> -->
 				</ul>
 			</li>
 			<li><a href="#"><i class="icon-Chat-locked"><span class="path1"></span><span class="path2"></span></i>Login &amp; Error</a>

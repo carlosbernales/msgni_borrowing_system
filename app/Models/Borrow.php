@@ -30,6 +30,8 @@ class Borrow extends Model
                             'contact',
                             'speed_test',
                             'borrow_status',
+                            'borrow_id',
+                            'deadline'
                         ];
 
     // Define the guarded attributes (not mass assignable)

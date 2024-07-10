@@ -11,8 +11,9 @@ use App\Models\Order;
 use App\Models\Order_Item;
 use App\Models\Borrow;
 use App\Mail\NewOrder;
+use App\Mail\UploadBorrow;
 use Illuminate\Support\Facades\Mail;
-
+use Illuminate\Support\Str;
 
 
 class UserController extends Controller
@@ -194,6 +195,8 @@ class UserController extends Controller
 
         Cart::where('user_fk_id', $user->id)->delete();
 
+
+
         Mail::to('carlosbernales24@gmail.com')->send(new NewOrder);
 
         return redirect('/')->with('success', 'Order placed successfully!');
@@ -216,13 +219,22 @@ class UserController extends Controller
                 'user_fk_id' => $request->user_fk_id, 
                 'contact' => $request->contact,
                 'speed_test' => $imageName,
+                'deadline' => $request->deadline ?? null,
                 'product_fk_id' => $request->product_fk_id, 
+                'borrow_id' => $this->generateBorrowId(),
             ]);
+
+            Mail::to('sarahelmenzo13@gmail.com')->send(new UploadBorrow);
 
             return redirect()->back()->with('success', 'Borrow added successfully.');
         }
 
         return redirect()->back()->with('error', 'Failed to add product. Please upload a valid image.');
+    }
+
+    private function generateBorrowId()
+    {
+        return strtoupper(Str::random(11));
     }
 
 

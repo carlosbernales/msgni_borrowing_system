@@ -11,6 +11,12 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\OrderAccepted;
 use App\Mail\OrderCompleted;
 use App\Models\Borrow;
+use App\Mail\AcceptBorrowIT;
+use App\Mail\AcceptBorrowAdmin;
+use App\Models\Account;
+use App\Mail\BorrowCompleted;
+use App\Mail\BorrowDeny;
+use App\Mail\BorrowReturned;
 
 
 class AdminController extends Controller
@@ -232,4 +238,115 @@ class AdminController extends Controller
             'borrowed' => $borrowed,
         ]);
     }
+
+    public function acceptBorrow_it(Borrow $id)
+    {
+        $id->update(['borrow_status' => 'pending_admin']);
+
+        $adminEmails = Account::where('role', 'Admin')->pluck('email');
+
+        foreach ($adminEmails as $email) {
+            Mail::to($email)->send(new AcceptBorrowIT($id));
+        }
+
+        return redirect()->back()->with('status', 'Order accepted successfully.');
+    }
+
+    public function acceptBorrow_admin(Request $request, Borrow $id)
+    {
+        $id->update([
+            'borrow_status' => 'Accepted',
+            'deadline' => $request->deadline,
+        ]);
+
+        Mail::to($id->email)->send(new AcceptBorrowAdmin($id));
+
+        return redirect()->back()->with('status', 'Order accepted successfully.');
+    }
+
+    public function borrowedlist_accepted()
+    {
+        if (!session()->has('admin_id') && !session()->has('it_id')) {
+            return redirect('/');
+        }
+        $borrowed_accepted = Borrow::with('product')
+        ->where('borrow_status','Accepted')->get();
+
+        return view('admin.borrowed_accepted', [
+            'borrowed_accepted' => $borrowed_accepted,
+        ]);
+    }
+
+    public function borrow_completed(Borrow $id)
+    {
+        $id->update(['borrow_status' => 'Completed']);
+
+        $product = Product::find($id->product_fk_id);
+
+        if ($product) {
+            $product->borrow_stocks -= 1;
+            $product->save();
+        }
+
+        Mail::to($id->email)->send(new BorrowCompleted($id));
+
+        return redirect()->back()->with('status', 'Order accepted successfully.');
+    }
+
+
+    public function borrowedlist_completed()
+    {
+        if (!session()->has('admin_id') && !session()->has('it_id')) {
+            return redirect('/');
+        }
+        $completed_borrow = Borrow::with('product')
+        ->where('borrow_status', 'Completed')->get();
+
+        return view('admin.completed_borrow', [
+            'completed_borrow' => $completed_borrow,
+        ]);
+    }
+
+    public function borrowedlist_returned()
+    {
+        if (!session()->has('admin_id') && !session()->has('it_id')) {
+            return redirect('/');
+        }
+        $returned_borrow = Borrow::with('product')
+        ->where('borrow_status', 'Returned')->get();
+
+        return view('admin.returned_borrow', [
+            'returned_borrow' => $returned_borrow,
+        ]);
+    }
+
+    public function borrowDenyIt(Request $request, Borrow $id)
+    {
+        $id->update([
+            'borrow_status' => 'Deny'
+        ]);
+
+        Mail::to($id->email)->send(new BorrowDeny($id));
+
+        return redirect()->back()->with('status', 'Success.');
+    }
+
+    public function borrow_returned(Borrow $id)
+    {
+        $id->update(['borrow_status' => 'Returned']);
+
+        $product = Product::find($id->product_fk_id);
+
+        if ($product) {
+            $product->borrow_stocks += 1;
+            $product->save();
+        }
+
+        Mail::to($id->email)->send(new BorrowReturned($id));
+
+        return redirect()->back()->with('status', 'Order accepted successfully.');
+    }
+
+    
+
 }

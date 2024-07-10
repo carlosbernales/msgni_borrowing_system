@@ -27,12 +27,11 @@
 											<th>Contact</th>
 											<th>Speed Test</th>
 											<th>Status</th>
-											<th></th>
+                                            <th></th>
 										</tr>
 									</thead>
 									<tbody>
-									@foreach ($borrowed as $borrowed)
-										@if(!(session('admin_id') && $borrowed->borrow_status === 'pending_it'))
+									@foreach ($completed_borrow as $borrowed)
 											<tr>
 												<td>{{ $borrowed->borrow_id }}</td>
 												<td>{{ $borrowed->product->product_name }}</td>
@@ -77,70 +76,14 @@
 													</div>
 												</td>
 												<td>{{ $borrowed->borrow_status }}</td>
-												<td>
-												@if(session('it_id') && $borrowed->borrow_status === 'pending_it')
-													<form action="/acceptBorrow_it/{{ $borrowed->id }}" method="POST" class="d-inline">
+                                                <td>
+                                                    <form action="/borrow_returned/{{ $borrowed->id }}" method="POST" class="d-inline">
 														@csrf
 														@method('PUT')
-														<button type="submit" class="btn btn-primary btn-sm">Approve IT</button>
+														<button type="submit" class="btn btn-primary btn-sm">Returned</button>
 													</form>
-													<form action="/borrowDenyIt/{{ $borrowed->id }}" method="POST" class="d-inline">
-														@csrf
-														@method('PUT')
-														<button type="submit" class="btn btn-danger btn-sm">Deny</button>
-													</form>
-												@elseif(session('admin_id') && $borrowed->borrow_status === 'pending_it')
-													<form action="/acceptBorrow_admin/{{ $borrowed->id }}" method="POST" class="d-inline">
-														@csrf
-														@method('PUT')
-														<button type="submit" class="btn btn-primary btn-sm">Approve</button>
-													</form>
-													<form action="/borrowDenyIt/{{ $borrowed->id }}" method="POST" class="d-inline">
-														@csrf
-														@method('PUT')
-														<button type="submit" class="btn btn-danger btn-sm">Deny</button>
-													</form>
-												@elseif(session('it_id') && $borrowed->borrow_status === 'pending_admin')
-													<!-- Hide all forms -->
-												@elseif(session('admin_id') && $borrowed->borrow_status === 'pending_admin')
-													<form action="/acceptBorrow_admin/{{ $borrowed->id }}" method="POST" class="d-inline">
-														@csrf
-														@method('PUT')
-														<button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#deadlineModal-{{ $borrowed->id }}">Approve</button>
-													</form>
-													<form action="/borrowDenyIt/{{ $borrowed->id }}" method="POST" class="d-inline">
-														@csrf
-														@method('PUT')
-														<button type="submit" class="btn btn-danger btn-sm">Deny</button>
-													</form>
-												@endif
-												</td>
-												<div class="modal center-modal fade" id="deadlineModal-{{ $borrowed->id }}" tabindex="-1">
-													<div class="modal-dialog">
-														<div class="modal-content">
-															<div class="modal-header">
-																<h5 class="modal-title">Set Deadline for Return</h5>
-																<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-															</div>
-															<form method="POST" action="/acceptBorrow_admin/{{ $borrowed->id }}">
-																@csrf
-																@method('PUT')
-																<div class="modal-body">
-																	<div class="mb-3">
-																		<label for="deadline" class="form-label">Deadline</label>
-																		<input type="date" class="form-control" id="deadline" name="deadline" required>
-																	</div>
-																</div>
-																<div class="modal-footer modal-footer-uniform">
-																	<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-																	<button type="submit" class="btn btn-primary float-end">Approve</button>
-																</div>
-															</form>
-														</div>
-													</div>
-												</div>
+                                                </td>
 											</tr>
-										@endif
 									@endforeach
 									</tbody>
 								</table>
