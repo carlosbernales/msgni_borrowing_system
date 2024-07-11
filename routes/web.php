@@ -64,8 +64,7 @@ Route::match(['get', 'post'], '/cart_update', [UserController::class, 'cart_upda
 Route::match(['get', 'post'], '/cart_remove', [UserController::class, 'cart_remove']);
 Route::match(['get', 'post'], '/checkout.{user_id}', [UserController::class, 'checkout']);
 Route::match(['get', 'post'], '/place-order', [UserController::class, 'placeOrder']);
-
-Route::post('/upload_borrow', [UserController::class, 'upload_borrow']);
+Route::match(['get', 'post'], '/upload_borrow', [UserController::class, 'upload_borrow']);
 
 
 

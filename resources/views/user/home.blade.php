@@ -2,11 +2,11 @@
 @include('user/header')
 <style>
 	.product-status {
-    background-color: #f44336; /* Example: Red background for status */
-    color: #fff; /* Example: White text for visibility */
-    padding: 5px 10px; /* Example: Padding around the text */
-    margin-top: 10px; /* Example: Spacing above the status */
-    font-weight: bold; /* Example: Bold text */
+    background-color: #f44336; 
+    color: #fff; 
+    padding: 5px 10px; 
+    margin-top: 10px; 
+    font-weight: bold; 
 }
 .alertify-notifier .ajs-message.ajs-danger {
     background-color: #dc3545;
@@ -62,23 +62,6 @@
 				@endforeach
 			</div>
 
-
-
-
-
-			<div class="row">
-				<div class="col-lg-12 text-center">
-					<div class="pagination-wrap">
-						<ul>
-							<li><a href="#">Prev</a></li>
-							<li><a href="#">1</a></li>
-							<li><a class="active" href="#">2</a></li>
-							<li><a href="#">3</a></li>
-							<li><a href="#">Next</a></li>
-						</ul>
-					</div>
-				</div>
-			</div>
 
 			<div class="modal center-modal fade" id="modal-borrow" tabindex="-1">
 				<div class="modal-dialog">

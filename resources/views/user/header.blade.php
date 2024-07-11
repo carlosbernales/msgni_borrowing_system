@@ -57,7 +57,7 @@
 						<!-- logo -->
 						<div class="site-logo">
 							<a href="index.html">
-								<img src="template/assets/img/logo.png" alt="">
+								<!-- <img src="template/assets/img/logo.png" alt=""> -->
 							</a>
 						</div>
 						<!-- logo -->

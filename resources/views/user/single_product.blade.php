@@ -43,14 +43,6 @@
                             <a href="javascript:void(0);" class="cart-btn add-to-cart" data-product-id="{{ $product->id }}"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
                         @endif
                     </div>
-
-                    <h4>Share:</h4>
-                    <ul class="product-share">
-                        <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
-                        <li><a href="#"><i class="fab fa-twitter"></i></a></li>
-                        <li><a href="#"><i class="fab fa-google-plus-g"></i></a></li>
-                        <li><a href="#"><i class="fab fa-linkedin"></i></a></li>
-                    </ul>
                 </div>
             </div>
         </div>
@@ -99,19 +91,6 @@
             @endforeach
         </div>
 
-        <div class="row">
-            <div class="col-lg-12 text-center">
-                <div class="pagination-wrap">
-                    <ul>
-                        <li><a href="#">Prev</a></li>
-                        <li><a href="#">1</a></li>
-                        <li><a class="active" href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#">Next</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
 <!-- end products -->

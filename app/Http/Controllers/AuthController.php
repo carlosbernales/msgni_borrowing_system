@@ -65,8 +65,13 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+    
         $credentials = $request->only('email', 'password');
-
+    
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
             
@@ -83,11 +88,21 @@ class AuthController extends Controller
                 session(['it_id' => $user->id]); 
                 return redirect('/dashboard');
             }
+        } else {
+            $user = Account::where('email', $request->email)->first();
+            
+            if (!$user) {
+                return redirect('/account/login')
+                    ->withInput($request->only('email'))
+                    ->withErrors(['email' => 'No email found']);
+            } else {
+                return redirect('/account/login')
+                    ->withInput($request->only('email'))
+                    ->withErrors(['password' => 'Wrong password']);
+            }
         }
-        return redirect('/account/login')
-            ->withInput($request->only('email'))
-            ->withErrors(['email' => 'These credentials do not match our records.']);
     }
+    
 
 
     public function logout()
