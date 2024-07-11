@@ -94,7 +94,9 @@ class UserController extends Controller
         }
         
         $user_id = session('user_id');
-        $cartItems = Cart::where('user_fk_id', $user_id)->get();
+        $cartItems = Cart::where('user_fk_id', $user_id)
+        ->where('status', 'pending')
+        ->get();
 
         $products = Product::whereIn('id', $cartItems->pluck('fk_product_id'))->get();
 
@@ -178,12 +180,19 @@ class UserController extends Controller
         $order->order_status = 'Pending';
         $order->order_total = $orderTotal;
         $order->user_fk_id = $user->id;
-        $order->order_id = strtoupper(uniqid('ORD-'));
+        $order->order_id = $this->generateOrderId();
         $order->save();
 
         foreach ($cartItems as $cartItem) {
             $product = $products->where('id', $cartItem->fk_product_id)->first();
             $productTotal = $cartItem->cart_qty * $product->product_price;
+
+            if ($product->stocks >= $cartItem->cart_qty) {
+                $product->stocks -= $cartItem->cart_qty;
+                $product->save();
+            } else {
+                return redirect('/')->with('error', 'Not enough stock for product: ' . $product->name);
+            }
 
             $orderItem = new Order_Item();
             $orderItem->order_fk_id = $order->id; 
@@ -193,14 +202,13 @@ class UserController extends Controller
             $orderItem->save();
         }
 
-        Cart::where('user_fk_id', $user->id)->delete();
-
-
+        Cart::where('user_fk_id', $user->id)->update(['status' => 'placed']);
 
         Mail::to('carlosbernales24@gmail.com')->send(new NewOrder);
 
         return redirect('/')->with('success', 'Order placed successfully!');
     }
+
 
     public function upload_borrow(Request $request)
     {
@@ -233,6 +241,11 @@ class UserController extends Controller
     }
 
     private function generateBorrowId()
+    {
+        return strtoupper(Str::random(15));
+    }
+
+    private function generateOrderId()
     {
         return strtoupper(Str::random(11));
     }

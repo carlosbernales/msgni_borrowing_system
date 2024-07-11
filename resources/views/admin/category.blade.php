@@ -9,14 +9,13 @@
             <div class="row">
                 <div class="col-12">
                     <div class="box">
-                        <div class="box-header with-border">
-                        </div>
-                        <div class="card-header" style="display: flex; justify-content: space-between;">
-                            <h3 class="box-title">Data Table With Full Features</h3>
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-center">
+                        <div class="box-header with-border" style="display: flex; justify-content: space-between;">
+                        <h3 class="box-title">Product Categories</h3>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-center">
                                 +
                             </button>
                         </div>
+
                         <!-- /.box-header -->
                         <div class="box-body">
                             <div class="table-responsive">

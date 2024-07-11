@@ -9,10 +9,8 @@
             <div class="row">
                 <div class="col-12">
                     <div class="box">
-                        <div class="box-header with-border">
-                        </div>
-                        <div class="card-header" style="display: flex; justify-content: space-between;">
-                            <h3 class="box-title">Data Table With Full Features</h3>
+                        <div class="box-header with-border" style="display: flex; justify-content: space-between;">
+						<h3 class="box-title">Pending Borrows</h3>
                         </div>
                         <!-- /.box-header -->
                         <div class="box-body">

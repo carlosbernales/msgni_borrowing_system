@@ -26,6 +26,7 @@ class Cart extends Model
                             'user_fk_id', 
                             'fk_product_id', 
                             'cart_qty', 
+                            'status'
                         ];
 
     // Define the guarded attributes (not mass assignable)

@@ -10,9 +10,7 @@
                 <div class="col-12">
                     <div class="box">
                         <div class="box-header with-border">
-                        </div>
-                        <div class="card-header" style="display: flex; justify-content: space-between;">
-                            <h3 class="box-title">Data Table With Full Features</h3>
+                        <h3 class="box-title">Pending Orders</h3>
                         </div>
                         <!-- /.box-header -->
                         <div class="box-body">

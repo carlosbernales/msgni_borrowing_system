@@ -8,11 +8,9 @@
 		<section class="content">
             <div class="row">
                 <div class="col-12">
-                    <div class="box">
-                        <div class="box-header with-border">
-                        </div>
-                        <div class="card-header" style="display: flex; justify-content: space-between;">
-                            <h3 class="box-title">Data Table With Full Features</h3>
+                    <div class="box"> 
+                        <div class="box-header with-border" style="display: flex; justify-content: space-between;">
+                        <h3 class="box-title">Products</h3>
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-center">
                                 +
                             </button>
@@ -100,22 +98,31 @@
                                                                 <label for="inputField" class="form-label">Product Name</label>
                                                                 <input type="text" class="form-control" name="product_name" value="{{ $product->product_name }}">
                                                             </div>
-                                                            <div class="mb-3">
-                                                                <label for="inputField" class="form-label">Stock Price</label>
-                                                                <input type="number" class="form-control" name="stock_price" step="0.01" value="{{ $product->stock_price }}">
-                                                            </div>
-                                                            <div class="mb-3">
-                                                                <label for="inputField" class="form-label">Selling Price</label>
-                                                                <input type="number" class="form-control" name="product_price" step="0.01" value="{{ $product->product_price }}">
-                                                            </div>
-                                                            <div class="mb-3">
-                                                                <label for="inputField" class="form-label">Selling Quantity</label>
-                                                                <input type="number" class="form-control" name="stocks" >
-                                                            </div>
-                                                            <div class="mb-3">
-                                                                <label for="inputField" class="form-label">Borrow Quantity</label>
-                                                                <input type="number" class="form-control" name="borrow_stocks" >
-                                                            </div>
+
+                                                            <div class="row">
+                                                                <div class="col-md-6 mb-3">
+                                                                    <label for="inputField" class="form-label">Stock Price</label>
+                                                                    <input type="number" class="form-control" name="stock_price" step="0.01" value="{{ $product->stock_price }}">
+                                                                </div> <!-- Closing div for col-md-6 mb-3 -->
+
+                                                                <div class="col-md-6 mb-3">
+                                                                    <label for="inputField" class="form-label">Selling Price</label>
+                                                                    <input type="number" class="form-control" name="product_price" step="0.01" value="{{ $product->product_price }}">
+                                                                </div> <!-- Closing div for col-md-6 mb-3 -->
+                                                            </div> <!-- Closing div for row -->
+
+                                                            <div class="row">
+                                                                <div class="col-md-6 mb-3">
+                                                                    <label for="inputField" class="form-label">Selling Quantity</label>
+                                                                    <input type="number" class="form-control" name="stocks">
+                                                                </div> <!-- Closing div for col-md-6 mb-3 -->
+
+                                                                <div class="col-md-6 mb-3">
+                                                                    <label for="inputField" class="form-label">Borrow Quantity</label>
+                                                                    <input type="number" class="form-control" name="borrow_stocks">
+                                                                </div> <!-- Closing div for col-md-6 mb-3 -->
+                                                            </div> <!-- Closing div for row -->
+
                                                             <div class="mb-3">
                                                                 <label for="inputField" class="form-label">Description</label>
                                                                 <input type="text" class="form-control" name="product_desc" value="{{ $product->product_desc }}">
@@ -187,25 +194,30 @@
                                 <label for="inputField" class="form-label">Product Name</label>
                                 <input type="text" class="form-control" name="product_name" >
                             </div>
-                            <div class="mb-3">
-                                <label for="inputField" class="form-label">Selling Price</label>
-                                <input type="number" class="form-control" step="0.01" name="product_price" >
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="inputField" class="form-label">Selling Price</label>
+                                    <input type="number" class="form-control" step="0.01" name="product_price">
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="inputField" class="form-label">Stock Price</label>
+                                    <input type="number" class="form-control" step="0.01" name="stock_price">
+                                </div>
                             </div>
 
-                            <div class="mb-3">
-                                <label for="inputField" class="form-label">Stock Price</label>
-                                <input type="number" class="form-control" step="0.01" name="stock_price" >
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="inputField" class="form-label">Selling Quantity</label>
+                                    <input type="number" class="form-control" name="stocks" >
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="inputField" class="form-label">Borrow Quantity</label>
+                                    <input type="number" class="form-control" name="borrow_stocks" >
+                                </div>
                             </div>
 
-                            <div class="mb-3">
-                                <label for="inputField" class="form-label">Selling Quantity</label>
-                                <input type="number" class="form-control" name="stocks" >
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="inputField" class="form-label">Borrow Quantity</label>
-                                <input type="number" class="form-control" name="borrow_stocks" >
-                            </div>
                             <div class="mb-3">
                                 <label for="inputField" class="form-label">Product Description</label>
                                 <input type="text" class="form-control" name="product_desc" >
